@@ -1,12 +1,19 @@
 package com.ucu
 
+import java.time.{Instant, LocalDateTime}
 
-case class PanelData(temperature: Int)
+import com.ucu.solar.avro.SolarPanelData
+
 
 trait Generator {
-  def generate(): PanelData
+  def generate(): SolarPanelData
 }
 
 class RandomGenerator extends Generator {
-  override def generate(): PanelData = PanelData((Math.random() * 100).round.toInt)
+  override def generate(): SolarPanelData = SolarPanelData(
+    Instant.now().toEpochMilli,
+    (Math.random() * 20).toInt,
+    Math.random() * 50,
+    20 + (Math.random() * 20).toInt)
+
 }

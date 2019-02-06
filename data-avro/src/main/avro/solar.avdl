@@ -1,0 +1,10 @@
+@namespace ("com.ucu.solar.avro")
+protocol SolarPanel {
+  record SolarPanelData {
+    @logicalType("timestamp-millis")
+    long timestamp;
+    long volts;
+    double kWhPerHour;
+    int efficiency;
+  }
+}

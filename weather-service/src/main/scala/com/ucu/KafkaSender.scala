@@ -4,6 +4,7 @@ import java.util.{Properties, UUID}
 
 import akka.actor.Actor
 import com.typesafe.scalalogging.LazyLogging
+import com.ucu.openweather.WeatherResponse
 import com.ucu.solar.avro.SolarPanelData
 import com.ucu.weather.avro.WeatherInfo
 import io.confluent.kafka.serializers.KafkaAvroSerializer
@@ -11,9 +12,10 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.kafka.common.serialization.StringSerializer
 
 
-case class Send(id: String, data: Set[SolarPanelData])
+case class WeatherMessage(id: String, weather: WeatherResponse)
 
-class KafkaSender extends Actor with LazyLogging {
+class KafkaSender extends Actor with LazyLogging{
+
 
   private val props = new Properties()
   props.put("bootstrap.servers", "localhost:9092")
@@ -21,17 +23,18 @@ class KafkaSender extends Actor with LazyLogging {
   props.put("key.serializer", classOf[StringSerializer].getCanonicalName)
   props.put("value.serializer", classOf[KafkaAvroSerializer].getCanonicalName)
   props.put("client.id", UUID.randomUUID().toString())
-  private val producer = new KafkaProducer[String, SolarPanelData](props)
-
+  private val producer = new KafkaProducer[String, WeatherInfo](props)
 
   override def receive: Receive = {
 
-    case Send(id, data) =>
+    case WeatherMessage(id, weather) =>
       logger.info("Sending data to topic")
-      data.foreach { x =>
-        val record = new ProducerRecord[String, SolarPanelData]("solar-panel-data", id, x)
-        producer.send(record)
-      }
+      val wInfo = new WeatherInfo(weather.dt, weather.name, weather.main.temp, weather.main.humidity, weather.main.pressure)
+      val record = new ProducerRecord[String, WeatherInfo]("weather-data", id, wInfo)
+      producer.send(record)
       producer.flush()
+
+
+    case any => logger.info(s"Kafka sender >>> $any")
   }
 }

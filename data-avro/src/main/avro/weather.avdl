@@ -1,0 +1,11 @@
+@namespace ("com.ucu.weather.avro")
+protocol WeatherEvent {
+  record WeatherInfo {
+    @logicalType("timestamp-millis")
+    long timestamp;
+    string name;
+    double temperature;
+    double humidity;
+    int pressure;
+  }
+}
