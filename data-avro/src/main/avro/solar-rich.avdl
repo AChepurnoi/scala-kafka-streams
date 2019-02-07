@@ -1,0 +1,15 @@
+@namespace ("com.ucu.solar.avro")
+protocol SolarPanel {
+  record SolarRichData {
+    @logicalType("timestamp-millis")
+    long timestamp;
+    long volts;
+    double kWhPerHour;
+    int efficiency;
+
+    string name;
+    double temperature;
+    double humidity;
+    int pressure;
+  }
+}
