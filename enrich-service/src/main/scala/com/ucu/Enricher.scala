@@ -1,21 +1,19 @@
 package com.ucu
 
 import java.time.Duration
-import java.util
 import java.util.Properties
 
 import com.typesafe.scalalogging.LazyLogging
 import com.ucu.solar.avro.{SolarPanelData, SolarRichData}
 import com.ucu.weather.avro.WeatherInfo
-import io.confluent.kafka.serializers.{KafkaAvroDeserializer, KafkaAvroDeserializerConfig, KafkaAvroSerializer}
-import io.confluent.kafka.streams.serdes.avro.{GenericAvroDeserializer, GenericAvroSerde}
-import org.apache.avro.generic.GenericRecord
+import io.confluent.kafka.serializers.{KafkaAvroDeserializer, KafkaAvroDeserializerConfig}
+import io.confluent.kafka.streams.serdes.avro.GenericAvroSerde
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams.kstream.{JoinWindows, Produced}
-import org.apache.kafka.streams.{KafkaStreams, StreamsConfig, Topology}
 import org.apache.kafka.streams.scala.StreamsBuilder
-import org.apache.kafka.streams.scala.kstream.{Consumed, Joined, KStream}
+import org.apache.kafka.streams.scala.kstream.{Consumed, Joined}
+import org.apache.kafka.streams.{KafkaStreams, StreamsConfig, Topology}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable

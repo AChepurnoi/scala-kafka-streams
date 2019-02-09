@@ -2,15 +2,12 @@ package com.ucu
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.scalalogging.LazyLogging
-import com.ucu.openweather.JsonSupport
 
 
-object WeatherApp extends App with LazyLogging with JsonSupport {
-
-
+object WeatherApp extends App with LazyLogging {
   logger.info("Starting weather service")
-  implicit val system: ActorSystem = ActorSystem("weather-system")
-
-  val supervisor: ActorRef = system.actorOf(Props(new WeatherServiceSupervisor()))
+  val system: ActorSystem = ActorSystem("weather-system")
+  val configuration = new Configuration()
+  val supervisor: ActorRef = system.actorOf(Props(new WeatherServiceSupervisor(configuration)))
 
 }
