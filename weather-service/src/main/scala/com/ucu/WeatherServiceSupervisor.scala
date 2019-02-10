@@ -29,7 +29,9 @@ class WeatherServiceSupervisor(val configuration: Configuration) extends Actor w
   private val weatherActor = context.actorOf(WeatherActor.props(configuration))
   private val kafkaSender = context.actorOf(KafkaSender.props(configuration))
 
-  private val intervalTrigger = context.system.scheduler.schedule(1 seconds, 2 seconds, self, IntervalTrigger())
+  private val intervalSec: Int = Math.floorDiv(60, Math.floorDiv(60, configuration.clusterSize))
+  logger.info(s"Interval: $intervalSec")
+  private val intervalTrigger = context.system.scheduler.schedule(intervalSec seconds, intervalSec seconds, self, IntervalTrigger())
 
   override def receive: Receive = {
     case IntervalTrigger() =>

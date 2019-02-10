@@ -8,6 +8,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry
 import org.apache.zookeeper.CreateMode
 import spray.json._
 import com.ucu.PlantNodeProtocol._
+
 class ZKNodeActor(val id: String, val zkUrl: String) extends Actor with LazyLogging{
 
   private val retryPolicy = new ExponentialBackoffRetry(1000, 3)

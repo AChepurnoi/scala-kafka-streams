@@ -8,6 +8,13 @@ import io.confluent.kafka.streams.serdes.avro.GenericAvroSerde
 import org.apache.avro.generic.GenericRecord
 import org.apache.kafka.common.serialization.{Deserializer, Serde, Serdes, Serializer}
 
+/**
+  * AvroSerde is an extension of confluent GenericAvroSerde.
+  * The purpose of this class to provide typed case class instead of Avro GenericRecord.
+  *
+  * Schema registry must be parametrized with SPECIFIC_AVRO_READER_CONFIG=true to allow reading SpecificAvroRecords
+  * from kafka stream, instead of GenericRecord. (Yes this class is just casting SpecificRecord ¯\_(ツ)_/¯)
+  */
 object AvroSerde {
 
   class AvroDeserializer[T <: GenericRecord](val genDes: Deserializer[GenericRecord]) extends Deserializer[T] {

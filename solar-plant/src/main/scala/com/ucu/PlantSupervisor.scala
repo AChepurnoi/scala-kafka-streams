@@ -30,8 +30,10 @@ class PlantSupervisor(id: String, configuration: Configuration) extends Actor wi
   import context.dispatcher
 
   implicit val timeout: Timeout = Timeout(10 seconds)
-  private val scheduler = context.system.scheduler.schedule(5 seconds, 5 seconds, self, IntervalTick())
-  private val panels: Set[ActorRef] = (for (_ <- 1 to 10) yield context.actorOf(SolarPanel.props())).toSet
+
+  private val scheduler = context
+    .system.scheduler.schedule(configuration.intervalSec seconds, configuration.intervalSec seconds, self, IntervalTick())
+  private val panels: Set[ActorRef] = (for (_ <- 1 to configuration.panelCount) yield context.actorOf(SolarPanel.props())).toSet
   private val zkNode = context.actorOf(ZKNodeActor.props(configuration, id))
   private val kafkaSender = context.actorOf(KafkaSender.props(configuration))
 
@@ -50,6 +52,7 @@ class PlantSupervisor(id: String, configuration: Configuration) extends Actor wi
 }
 
 object PlantSupervisor {
+
   case class IntervalTick()
 
   def props(configuration: Configuration): Props = Props(new PlantSupervisor(UUID.randomUUID().toString, configuration))

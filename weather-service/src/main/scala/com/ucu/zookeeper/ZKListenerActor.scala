@@ -15,15 +15,15 @@ import com.ucu.zookeeper.PlantRegistry.{PlantRegistered, PlantRemoved}
 
 class ZKListenerActor private(val zookeeperURL: String, val registry: ActorRef) extends Actor with LazyLogging {
 
-  override def preStart(): Unit = {
-    val retryPolicy = new ExponentialBackoffRetry(1000, 3)
-    val client = CuratorFrameworkFactory.newClient(zookeeperURL, retryPolicy)
-    client.start()
+  private val retryPolicy = new ExponentialBackoffRetry(1000, 3)
+  private val client = CuratorFrameworkFactory.newClient(zookeeperURL, retryPolicy)
+  private val cache = new PathChildrenCache(client, "/solar-plant", true)
 
-    val cache = new PathChildrenCache(client, "/solar-plant", true) {
-      getListenable.addListener(handle)
-      start()
-    }
+
+  override def preStart(): Unit = {
+    client.start()
+    cache.getListenable.addListener(handle)
+    cache.start()
   }
 
   private def handle: PathChildrenCacheListener = { (_, event) =>
@@ -49,6 +49,11 @@ class ZKListenerActor private(val zookeeperURL: String, val registry: ActorRef) 
 
   override def receive: Receive = {
     case x => logger.warn(s"Message received by ZK listener $x")
+  }
+
+  override def postStop(): Unit = {
+    cache.close()
+    client.close()
   }
 }
 
