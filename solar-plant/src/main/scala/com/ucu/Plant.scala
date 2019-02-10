@@ -10,11 +10,12 @@ import akka.util.Timeout
 import org.apache.curator.framework.CuratorFrameworkFactory
 import org.apache.curator.retry.ExponentialBackoffRetry
 import org.apache.zookeeper.CreateMode
-
 import spray.json._
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import PlantNodeProtocol._
+import com.ucu.kafka.KafkaSender
 
 
 object Plant extends App with LazyLogging {
@@ -23,8 +24,15 @@ object Plant extends App with LazyLogging {
 
   logger.info("Starting actor system")
   val system = ActorSystem("solar-plant-system")
-  val kafkaSender = system.actorOf(Props[KafkaSender])
-  val manager = system.actorOf(Props(new PlantManager(UUID.randomUUID().toString, kafkaSender)))
+  val configuration = new Configuration
+  val supervisor = system.actorOf(PlantSupervisor.props(configuration))
   logger.info("Actor system started")
+
+  sys.ShutdownHookThread {
+    logger.info("Stopping supervisor")
+    system.stop(supervisor)
+    logger.info("Stopping system")
+    system.terminate()
+  }
 
 }

@@ -10,4 +10,10 @@ object WeatherApp extends App with LazyLogging {
   val configuration = new Configuration()
   val supervisor: ActorRef = system.actorOf(Props(new WeatherServiceSupervisor(configuration)))
 
+  sys.ShutdownHookThread {
+    logger.info("Stopping manager")
+    system.stop(supervisor)
+    logger.info("Stopping system")
+    system.terminate()
+  }
 }

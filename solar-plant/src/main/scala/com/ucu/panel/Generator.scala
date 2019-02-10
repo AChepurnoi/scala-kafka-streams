@@ -1,6 +1,6 @@
-package com.ucu
+package com.ucu.panel
 
-import java.time.{Instant, LocalDateTime}
+import java.time.Instant
 
 import com.ucu.solar.avro.SolarPanelData
 

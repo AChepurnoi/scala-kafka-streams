@@ -1,10 +1,10 @@
-package com.ucu
+package com.ucu.panel
 
-import akka.actor.Actor
+import akka.actor.{Actor, Props}
 import com.typesafe.scalalogging.LazyLogging
+import com.ucu.panel.SolarPanel.GetData
 
 
-case class GetData()
 
 class SolarPanel extends Actor with LazyLogging{
 
@@ -16,4 +16,9 @@ class SolarPanel extends Actor with LazyLogging{
       logger.info("Sent data back!")
 
   }
+}
+
+object SolarPanel{
+  case class GetData()
+  def props(): Props = Props(new SolarPanel)
 }
