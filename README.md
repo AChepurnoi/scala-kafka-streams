@@ -1,4 +1,7 @@
 # kafka-streams final project
+[![Build Status](https://travis-ci.com/AChepurnoi/scala-kafka-streams.svg?token=dFANEVvUn3HF3pZ9jc1Z&branch=master)](https://travis-ci.com/AChepurnoi/scala-kafka-streams)
+
+
 This is final project of `Functional and streaming programmin` at UCU. 
 The goal of the project is develop three services: two producers and steaming application that will join two streams in one enriched data stream.
 
