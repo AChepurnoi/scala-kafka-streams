@@ -38,6 +38,7 @@ Open weather API have limiting for each API key (1 req/sec). Now each node of We
 There are multiple things that could be implemented better:
 * Separate thread pools properly (Akka, HTTP and async thread pools)
 * Distributed rate limiting
+* Yes, my API token in the code. Feel free to use it 🌝
 
 ## How to run
 * TBD
