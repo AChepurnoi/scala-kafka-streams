@@ -7,7 +7,7 @@ scalaVersion := "2.12.8"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "hello"
+    name := "ucu-kafka-streams"
   )
 
 
@@ -25,6 +25,8 @@ lazy val dataAvro = (project in file("data-avro"))
 lazy val solarPlant = (project in file("solar-plant"))
   .dependsOn(dataAvro)
   .settings(
+    mainClass in assembly := Some("com.ucu.Plant"),
+    assemblyJarName in assembly := "solar.jar",
     inThisBuild(List(
       organization := "com.ucu",
       resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
@@ -48,6 +50,8 @@ lazy val solarPlant = (project in file("solar-plant"))
 lazy val weatherService = (project in file("weather-service"))
   .dependsOn(dataAvro)
   .settings(
+    mainClass in assembly := Some("com.ucu.WeatherApp"),
+    assemblyJarName in assembly := "weather.jar",
     inThisBuild(List(
       organization := "com.ucu",
       resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
@@ -75,6 +79,9 @@ lazy val weatherService = (project in file("weather-service"))
 lazy val enrichService = (project in file("enrich-service"))
   .dependsOn(dataAvro)
   .settings(
+    mainClass in assembly := Some("com.ucu.Enricher"),
+    assemblyJarName in assembly := "enrich.jar",
+
     inThisBuild(List(
       organization := "com.ucu",
       resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
