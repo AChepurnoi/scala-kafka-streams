@@ -1,14 +1,5 @@
 version: '3'
 services:
-#  weather:
-#    build:
-#      context: weather-service/
-#      dockerfile: Dockerfile
-#    image: ucu/weather-service:1
-#    environment:
-#    - ZOOKEEPER_URL: "zookeeper:2181"
-#      - KAFKA_BOOTSTRAP_SERVERS:
-
   zookeeper:
     image: confluentinc/cp-zookeeper:5.1.0
     hostname: zookeeper
@@ -151,3 +142,44 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:9092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
+  weather:
+    build:
+      context: weather-service/
+      dockerfile: Dockerfile
+    image: ucu/weather-service:1
+    environment:
+      ZOOKEEPER_URL: "zookeeper:2181"
+      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
+      SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      TOPIC: "weather-data"
+      OW_KEY: "3e59f18e0192bf243c0d708bc2e99a26"
+      NODES_COUNT: "1"
+
+  plant:
+    build:
+      context: solar-plant/
+      dockerfile: Dockerfile
+    image: ucu/solar-plant:1
+    environment:
+      ZOOKEEPER_URL: "zookeeper:2181"
+      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
+      SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      TOPIC: "solar-panel-data"
+      INTERVAL_SEC: "5"
+      PANEL_COUNT: "20"
+
+  steaming-app:
+    build:
+      context: enrich-service/
+      dockerfile: Dockerfile
+    image: ucu/steaming-app:1
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
+      SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      WEATHER_TOPIC: "weather-data"
+      SOLAR_DATA_TOPIC: "solar-panel-data"
+      OUTPUT_TOPIC: "solar-rich"
+      APP_ID: "enrich-service"
+      JOIN_INTERVAL_SEC: "5"
+
