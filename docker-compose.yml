@@ -148,6 +148,12 @@ services:
       context: weather-service/
       dockerfile: Dockerfile
     image: ucu/weather-service:1
+    depends_on:
+    - zookeeper
+    - broker
+    - schema-registry
+    - rest-proxy
+    - ksql-server
     environment:
       ZOOKEEPER_URL: "zookeeper:2181"
       KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
@@ -161,6 +167,12 @@ services:
       context: solar-plant/
       dockerfile: Dockerfile
     image: ucu/solar-plant:1
+    depends_on:
+    - zookeeper
+    - broker
+    - schema-registry
+    - rest-proxy
+    - ksql-server
     environment:
       ZOOKEEPER_URL: "zookeeper:2181"
       KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
@@ -174,6 +186,14 @@ services:
       context: enrich-service/
       dockerfile: Dockerfile
     image: ucu/steaming-app:1
+    depends_on:
+    - zookeeper
+    - broker
+    - schema-registry
+    - rest-proxy
+    - ksql-server
+    - plant
+    - weather
     environment:
       KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
       SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
