@@ -17,8 +17,8 @@ lazy val dataAvro = (project in file("data-avro"))
       "org.apache.avro" % "avro" % "1.8.2",
       "io.spray" %% "spray-json" % "1.3.5"
     ),
-    avroSpecificScalaSource in Compile := new File("data-avro/src/main/scala/"),
-    sourceGenerators in Compile += (avroScalaGenerate in Compile).taskValue,
+    avroSpecificScalaSource in Compile := baseDirectory.value / "src/main/scala/",
+    sourceGenerators in Compile += (avroScalaGenerateSpecific in Compile).taskValue,
     name := "data-avro"
   )
 
