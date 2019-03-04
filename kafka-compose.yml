@@ -29,7 +29,7 @@ services:
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_LOG4J_LOGGERS: "kafka.controller=WARN,state.change.logger=INFO,kafka.coordinator.group=WARN,kafka.cluster=WARN,kafka.log=WARN,kafka.server=WARN,kafka.zookeeper=WARN,kafka.network=WARN,kafka.zk=WARN,kafka.coordinator=WARN,kafka.common=WARN,kafka.utils=WARN,org.apache.zookeeper=WARN"
       KAFKA_LOG4J_ROOT_LOGLEVEL: WARN
       KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
@@ -149,66 +149,5 @@ services:
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
-#  weather:
-#    build:
-#      context: weather-service/
-#      dockerfile: Dockerfile
-#    image: ucu/weather-service:1
-#    restart: always
-#    depends_on:
-#    - zookeeper
-#    - broker
-#    - schema-registry
-#    - rest-proxy
-#    - ksql-server
-#    environment:
-#      ZOOKEEPER_URL: "zookeeper:2181"
-#      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
-#      SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
-#      TOPIC: "weather-data"
-#      OW_KEY: "3e59f18e0192bf243c0d708bc2e99a26"
-#      NODES_COUNT: "1"
-#
-#  plant:
-#    build:
-#      context: solar-plant/
-#      dockerfile: Dockerfile
-#    image: ucu/solar-plant:1
-#    restart: always
-#    depends_on:
-#    - zookeeper
-#    - broker
-#    - schema-registry
-#    - rest-proxy
-#    - ksql-server
-#    environment:
-#      ZOOKEEPER_URL: "zookeeper:2181"
-#      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
-#      SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
-#      TOPIC: "solar-panel-data"
-#      INTERVAL_SEC: "5"
-#      PANEL_COUNT: "20"
-#
-#  steaming-app:
-#    build:
-#      context: enrich-service/
-#      dockerfile: Dockerfile
-#    image: ucu/steaming-app:1
-#    restart: always
-#    depends_on:
-#    - zookeeper
-#    - broker
-#    - schema-registry
-#    - rest-proxy
-#    - ksql-server
-#    - plant
-#    - weather
-#    environment:
-#      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
-#      SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
-#      WEATHER_TOPIC: "weather-data"
-#      SOLAR_DATA_TOPIC: "solar-panel-data"
-#      OUTPUT_TOPIC: "solar-rich"
-#      APP_ID: "enrich-service"
-#      JOIN_INTERVAL_SEC: "5"
+
 

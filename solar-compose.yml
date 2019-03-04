@@ -1,0 +1,10 @@
+plant:
+  image: sashachepurnoi/solar-plant:1
+  restart: always
+  environment:
+    ZOOKEEPER_URL: "52.57.234.69:2181"
+    KAFKA_BOOTSTRAP_SERVERS: "52.57.234.69:9092"
+    SCHEMA_REGISTRY_URL: "http://52.57.234.69:8081"
+    TOPIC: "solar-panel-data"
+    INTERVAL_SEC: "5"
+    PANEL_COUNT: "20"
