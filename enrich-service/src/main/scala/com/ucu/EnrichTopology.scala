@@ -32,9 +32,9 @@ class EnrichTopology(implicit avroSerde: GenericAvroSerde) {
 
   def join(configuration: Configuration) = {
     val builder: StreamsBuilder = new StreamsBuilder
-    val weatherStream = builder.stream[String, WeatherInfo](configuration.weatherTopic)
+    val weatherStream = builder.table[String, WeatherInfo](configuration.weatherTopic)
     builder.stream[String, SolarPanelData](configuration.solarDataTopic)
-      .join(weatherStream)(combine, JoinWindows.of(Duration.ofSeconds(configuration.joinInterval)))
+      .join(weatherStream)(combine)
       .to(configuration.joinTopic)
 
     builder.build()
