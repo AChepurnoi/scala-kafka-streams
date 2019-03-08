@@ -1,11 +1,13 @@
-weather:
-  image: sashachepurnoi/weather-service:1
-  restart: always
-  environment:
-    ZOOKEEPER_URL: "${KAFKA_HOST}:2181"
-    KAFKA_BOOTSTRAP_SERVERS: "${KAFKA_HOST}:9092"
-    SCHEMA_REGISTRY_URL: "http://${KAFKA_HOST}:8081"
-    TOPIC: "weather-data"
-    OW_KEY: "3e59f18e0192bf243c0d708bc2e99a26"
-    NODES_COUNT: "1"
+version: '3'
+services:
+  weather:
+    image: sashachepurnoi/weather-service:1
+    restart: always
+    environment:
+      ZOOKEEPER_URL: "${KAFKA_HOST}:2181"
+      KAFKA_BOOTSTRAP_SERVERS: "${KAFKA_HOST}:9092"
+      SCHEMA_REGISTRY_URL: "http://${KAFKA_HOST}:8081"
+      TOPIC: "weather-data"
+      OW_KEY: "3e59f18e0192bf243c0d708bc2e99a26"
+      NODES_COUNT: "1"
 
